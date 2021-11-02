@@ -65,8 +65,8 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
     A project is a namespace with additional annotations to isolate their resources.
     
     ```sh
-    $ oc describe project $MY_NS
-    Name:             my-apps
+    $ oc describe project rbac-project
+    Name:             rbac-project
     Created:          19 minutes ago
     Labels:           <none>
     Annotations:      openshift.io/description=
