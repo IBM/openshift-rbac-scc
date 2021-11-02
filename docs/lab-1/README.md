@@ -61,6 +61,33 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
     ```
 
     You will automatically target the new project with subsequent `oc` commands.
+    
+    A project is a namespace with additional annotations to isolate their resources.
+    
+    ```sh
+    $ oc describe project $MY_NS
+    Name:             my-apps
+    Created:          19 minutes ago
+    Labels:           <none>
+    Annotations:      openshift.io/description=
+                      openshift.io/display-name=
+                      openshift.io/requester=IAM#user@email.com
+                      openshift.io/sa.scc.mcs=s0:c25,c15
+                      openshift.io/sa.scc.supplemental-groups=1000630000/10000
+                      openshift.io/sa.scc.uid-range=1000630000/10000
+    Display Name:     <none>
+    Description:      <none>
+    Status:           Active
+    Node Selector:    <none>
+    Quota:            <none>
+    Resource limits:  <none>
+    ```
+    
+    OpenShift allocated 3 ranges to the project: mcs, supplemental-groups, and uid-range. 
+
+    * sa.scc.mcs - Multi-Category Security (MCS) are SELinux labels that represent the owner of the process and is comprised of 3 unique sub-values sX:cY,cZ for each process-owner. MCS labels are used to distinguish between containers in different namespaces.
+    * sa.scc.supplemental-groups - Group ID or GID range, Supplemental-Groups are used for shared storage (NFS/GlusterFS), fsGroup for block storage (Ceph RBD, iSCSI, etc),
+    * sa.scc.uid-range - UID, UID range.
 
 1. Each new project that is created contains 3 Service Accounts. Let's take a look at them:
 
