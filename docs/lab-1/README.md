@@ -168,6 +168,24 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
 
     1. Then press enter
 
+    If you don't have access to the OpenShift console, you can find the secret for the service-account `helper` and retrieve the token as follows,
+    
+    ```sh
+    $ oc get secrets | grep helper-token
+    helper-token-cv2tq         kubernetes.io/service-account-token   4      34m
+    helper-token-kpt7q         kubernetes.io/service-account-token   4      34m
+    
+    $ oc describe secret helper-token-cv2tq
+    ```
+    
+    Make sure the secret `helper-token` belongs to the `helper` service-account: `Annotations:  kubernetes.io/service-account.name: helper`.
+    
+    ```sh
+    $ export TOKEN=$(oc get secret helper-token-kpt7q -o json | jq -r '.data.token')
+    $ export TOKEN=$(echo $TOKEN | base64 --decode)
+    $ echo $TOKEN
+    ```
+    
     Now that we have the token we need the server address of the cluster that we are authenticating with.
 
     1. In your terminal paste in `export SERVER=` without entering yet.
@@ -175,6 +193,12 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
 
         ![serverAddress](../images/server.png)
 
+        Or use the `oc cluster-info` command,
+	
+	```sh
+	$ oc cluster-info
+        Kubernetes master is running at https://c104-e.us-east.containers.cloud.ibm.com:30166
+        ```
     1. Go back to your terminal and paste in the server address so that the entire command reads something like:
 
         ```sh
@@ -186,7 +210,8 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
     1. Now let's authenticate to the cluster as our `helper` service account:
 
         ```sh
-        oc login --server=$SERVER --token=$TOKEN
+        $ oc login --server=$SERVER --token=$TOKEN
+	Logged into "https://c104-e.us-east.containers.cloud.ibm.com:30166" as "system:serviceaccount:rbac-project:helper" using the token provided.
         ```
 
 1. As the new service account, try retrieving a list of all projects
